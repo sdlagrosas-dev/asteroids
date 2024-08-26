@@ -1,4 +1,3 @@
-
 import pygame
 import sys
 from constants import *
@@ -16,7 +15,7 @@ def main():
     game_clock = pygame.time.Clock()
     dt = 0
 
-    # Sprite Groups    
+    # Sprite Groups
     asteroid_group = pygame.sprite.Group()
     shot_group = pygame.sprite.Group()
     updatable = pygame.sprite.Group()
@@ -25,7 +24,7 @@ def main():
     # Class Containers
     Player.containers = (updatable, drawable)
     Asteroid.containers = (updatable, drawable, asteroid_group)
-    AsteroidField.containers = (updatable)
+    AsteroidField.containers = updatable
     Shot.containers = (updatable, drawable, shot_group)
 
     # Initialized Instances
@@ -36,12 +35,12 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-        
+
         screen.fill(color="black")
 
         for obj in updatable:
             obj.update(dt)
-        
+
         for asteroid in asteroid_group:
             if asteroid.is_in_collision(player_1):
                 print("Game Over!")
@@ -49,16 +48,15 @@ def main():
 
             for bullet in shot_group:
                 if asteroid.is_in_collision(bullet):
-                    asteroid.kill()
-                    
+                    asteroid.split()
 
         for obj in drawable:
             obj.draw(screen)
 
         pygame.display.flip()
 
-        dt = game_clock.tick(60)/1000
+        dt = game_clock.tick(60) / 1000
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

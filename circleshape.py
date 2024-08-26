@@ -27,4 +27,3 @@ class CircleShape(pygame.sprite.Sprite):
         combined_r = self.radius + collision_with.radius
 
         return distance < combined_r
-
