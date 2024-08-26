@@ -20,6 +20,7 @@ def main():
                 return
         
         screen.fill(color="black")
+        player_1.update(dt)
         player_1.draw(screen)
         pygame.display.flip()
 
