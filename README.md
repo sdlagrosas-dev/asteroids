@@ -28,8 +28,8 @@ A simple game of asteroids made with pygame. This game was created while followi
 
 ## Roadmap
 
-- Add scorekeeping
-- Add a title screen
+- ✅ Add scorekeeping
+- ✅ Add a title screen
 - Add a game over screen
 - Add a way to restart the game
 - Add powerups
