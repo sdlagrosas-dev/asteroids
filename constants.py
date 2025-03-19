@@ -1,4 +1,5 @@
 # Project Constants
+import pygame
 
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
@@ -17,3 +18,11 @@ PLAYER_SPEED = 250
 PLAYER_SHOOT_SPEED = 500
 PLAYER_SHOOT_COOLDOWN = 0.1
 PLAYER_SHOT_RADIUS = 5
+
+SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+GAME_CLOCK = pygame.time.Clock()
+BG = pygame.image.load("assets/Background.png")
+
+
+def get_font(size):  # Returns Press-Start-2P in the desired size
+    return pygame.font.Font("assets/font.ttf", size)
