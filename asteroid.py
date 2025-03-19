@@ -49,7 +49,8 @@ class Asteroid(circleshape.CircleShape):
         # Scale velocity for smaller asteroids (make them faster)
         velocity_scale = 1 + (ASTEROID_KINDS - self.kind) * 0.5
         new_velocity_magnitude = (
-            base_velocity.length() * velocity_scale + ASTEROID_SPLIT_SPEED_MULTIPLIER * 3
+            base_velocity.length() * velocity_scale
+            + ASTEROID_SPLIT_SPEED_MULTIPLIER * 3
         )
 
         # Generate random angles within ±120° of bullet's trajectory
