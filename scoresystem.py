@@ -1,6 +1,5 @@
 import pygame
-
-pygame.font.init()
+from constants import get_font
 
 
 class ScoreSystem(pygame.sprite.Sprite):
@@ -8,14 +7,13 @@ class ScoreSystem(pygame.sprite.Sprite):
         super().__init__(*self.containers)
         self.destroyed_count = 0
         self.score = 0
-        self.font = pygame.font.Font(None, 24)
 
     def draw(self, screen):
-        label = self.font.render(f"Score: {self.score}", True, (255, 255, 255))
+        label = get_font(16).render(f"Score:{self.score}", True, (255, 255, 255))
         screen.blit(label, (10, 20))
 
-        destroyed_count_label = self.font.render(
-            f"Destroyed: {self.destroyed_count}",
+        destroyed_count_label = get_font(16).render(
+            f"Destroyed:{self.destroyed_count}",
             True,
             (255, 255, 255),
         )
