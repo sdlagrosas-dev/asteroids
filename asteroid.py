@@ -54,8 +54,8 @@ class Asteroid(circleshape.CircleShape):
         )
 
         # Generate random angles within ±120° of bullet's trajectory
-        angle_offset_1 = random.uniform(-120, 120)
-        angle_offset_2 = random.uniform(-120, 120)
+        angle_offset_1 = random.uniform(-100, 100)
+        angle_offset_2 = -(angle_offset_1)
 
         # Calculate new velocities
         velocity_1 = (
