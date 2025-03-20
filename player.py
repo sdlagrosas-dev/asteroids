@@ -12,11 +12,11 @@ class Player(circleshape.CircleShape):
         self.shoot_timer = 0
 
     def triangle(self):
-        front_margin = pygame.Vector2(0, -1).rotate(self.rotation)
-        side_margin = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5
-        a = self.position + front_margin * self.radius
-        b = self.position - front_margin * self.radius - side_margin
-        c = self.position - front_margin * self.radius + side_margin
+        front_vector = pygame.Vector2(0, -1).rotate(self.rotation)
+        side_vector = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius
+        a = self.position + front_vector * self.radius
+        b = self.position - front_vector * self.radius - side_vector
+        c = self.position - front_vector * self.radius + side_vector
         return [a, b, c]
 
     def draw(self, screen):
