@@ -27,7 +27,7 @@ def play():
     ScoreSystem.containers = (updatable, drawable)
 
     # Initialized Instances
-    player_1 = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.9)
     asteroid_field = AsteroidField()
     score_system = ScoreSystem()
 
@@ -35,6 +35,9 @@ def play():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_over(score_system)
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pause()
 
         SCREEN.fill(color="black")
 
@@ -42,7 +45,7 @@ def play():
             obj.update(dt)
 
         for asteroid in asteroid_group:
-            if asteroid.is_in_collision(player_1):
+            if asteroid.is_in_collision(player):
                 game_over(score_system)
 
             for bullet in shot_group:
@@ -60,6 +63,68 @@ def play():
         pygame.display.update()
 
 
+def pause():
+
+    overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
+    overlay.fill((0, 0, 0, 196)) # Custom background: light gray with about 50% transparency
+    SCREEN.blit(overlay, (0, 0))
+
+    while True:
+        GAME_CLOCK.tick(60)
+        menu_mouse_pos = pygame.mouse.get_pos()
+
+        pause_text = get_font(80).render("Paused", True, (186,174,165))
+        pause_rect = pause_text.get_rect(center=(SCREEN_WIDTH//2, 100))
+        
+        # The main button
+        resume_button = Button(
+            image=None,
+            pos=(SCREEN_WIDTH // 2, 300),
+            text_input="Resume",
+            font=get_font(55),
+            base_color="#d7fcd4",
+            hovering_color="White",
+        )
+        retry_button = Button(
+            image=None,
+            pos=(SCREEN_WIDTH // 2, 450),
+            text_input="Retry",
+            font=get_font(55),
+            base_color="#d7fcd4",
+            hovering_color="White",
+        )
+        quit_button = Button(
+            image=None,
+            pos=(SCREEN_WIDTH // 2, 600),
+            text_input="Quit",
+            font=get_font(55),
+            base_color="#d7fcd4",
+            hovering_color="White",
+        )
+
+        # Put the text on top of everything
+        SCREEN.blit(pause_text, pause_rect)
+
+        for button in [resume_button, retry_button, quit_button]:
+            button.changeColor(menu_mouse_pos)
+            button.update(SCREEN)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if resume_button.checkForInput(menu_mouse_pos):
+                    return
+                if retry_button.checkForInput(menu_mouse_pos):
+                    play()
+                if quit_button.checkForInput(menu_mouse_pos):
+                    pygame.quit()
+                    sys.exit()
+
+        pygame.display.update()
+
+
 def game_over(score_system: ScoreSystem):
 
     final_score = score_system.score
@@ -68,10 +133,10 @@ def game_over(score_system: ScoreSystem):
         SCREEN.blit(BG, (0, 0))
         menu_mouse_pos = pygame.mouse.get_pos()
 
-        game_over_text = get_font(100).render("Game Over!", True, "#b68f40")
+        game_over_text = get_font(80).render("Game Over!", True, "#b68f40")
         game_over_rect = game_over_text.get_rect(center=(SCREEN_WIDTH // 2, 100))
 
-        score_text = get_font(50).render(f"Score:{final_score}", True, "White")
+        score_text = get_font(30).render(f"Score:{final_score}", True, "White")
         score_rect = score_text.get_rect(center=(SCREEN_WIDTH // 2, 250))
 
         SCREEN.blit(game_over_text, game_over_rect)
@@ -81,7 +146,7 @@ def game_over(score_system: ScoreSystem):
             image=None,
             pos=(SCREEN_WIDTH // 2, 400),
             text_input="Retry",
-            font=get_font(75),
+            font=get_font(55),
             base_color="#d7fcd4",
             hovering_color="White",
         )
@@ -89,7 +154,7 @@ def game_over(score_system: ScoreSystem):
             image=None,
             pos=(SCREEN_WIDTH // 2, 550),
             text_input="Quit",
-            font=get_font(75),
+            font=get_font(55),
             base_color="#d7fcd4",
             hovering_color="White",
         )
