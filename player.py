@@ -12,11 +12,11 @@ class Player(circleshape.CircleShape):
         self.shoot_timer = 0
 
     def triangle(self):
-        forward = pygame.Vector2(0, 1).rotate(self.rotation)
-        right = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5
-        a = self.position + forward * self.radius
-        b = self.position - forward * self.radius - right
-        c = self.position - forward * self.radius + right
+        front_margin = pygame.Vector2(0, -1).rotate(self.rotation)
+        side_margin = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5
+        a = self.position + front_margin * self.radius
+        b = self.position - front_margin * self.radius - side_margin
+        c = self.position - front_margin * self.radius + side_margin
         return [a, b, c]
 
     def draw(self, screen):
@@ -35,12 +35,12 @@ class Player(circleshape.CircleShape):
         if keys[pygame.K_d]:
             self.rotate(dt)
         if keys[pygame.K_w]:
-            forward = pygame.Vector2(0, 1).rotate(self.rotation)
+            forward = pygame.Vector2(0, -1).rotate(self.rotation)
             self.position += forward * PLAYER_SPEED * dt
         if keys[pygame.K_s]:
-            backward = pygame.Vector2(0, -1).rotate(self.rotation)
+            backward = pygame.Vector2(0, 1).rotate(self.rotation)
             self.position += backward * PLAYER_SPEED * dt
-        if keys[pygame.K_SPACE]:
+        if keys[pygame.K_SPACE] or keys[pygame.K_KP_ENTER]:
             if self.shoot_timer <= 0:
                 self.shoot()
                 self.shoot_timer = PLAYER_SHOOT_COOLDOWN
@@ -49,9 +49,10 @@ class Player(circleshape.CircleShape):
                 self.shoot_timer -= dt
 
     def shoot(self):
+        front_pos = self.triangle()[0]
         shot_projectile = shot.Shot(
-            self.position.x, self.position.y, PLAYER_SHOT_RADIUS
+            front_pos[0], front_pos[1], PLAYER_SHOT_RADIUS
         )
         shot_projectile.velocity = (
-            pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
+            pygame.Vector2(0, -1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
         )
