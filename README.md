@@ -30,9 +30,19 @@ A simple game of asteroids made with pygame. This game was created while followi
 
 - ✅ Add scorekeeping
 - ✅ Add a title screen
-- Add a game over screen
-- Add a way to restart the game
-- Add powerups
-- Add more than one type of asteroid
+- ✅ Add a game over screen
+- ✅ Add a way to restart the game
+- ✅ Make the asteroids lumpy instead of perfectly round
+- ✅ Add a background image
+- ✅ Add a pause screen
+- ✅ Make asteroids bounce off each other instead of overlapping
+- ✅ Make the objects wrap around the screen instead of disappearing
+- Implement multiple lives and respawning
+- Make the ship have a triangular hit box instead of a circular one
 - Add a level system
-
+- Add an explosion effect for the asteroids
+- Add acceleration to the player movement
+- Create different weapon types
+- Add a shield power-up
+- Add a speed power-up
+- Add bombs that can be dropped
