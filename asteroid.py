@@ -12,7 +12,7 @@ class Asteroid(circleshape.CircleShape):
         self.kind = kind
 
     def generate_edges(self, n):
-        rand_angles = random.sample(range(0, 360, 10), n)
+        rand_angles = random.sample(range(0, 360, max((360//n)-(n//2), 1)), n)
         rand_angles.sort()
         rand_points = []
 
