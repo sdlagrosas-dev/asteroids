@@ -70,16 +70,18 @@ def play():
 def pause():
 
     overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
-    overlay.fill((0, 0, 0, 196)) # Custom background: light gray with about 50% transparency
+    overlay.fill(
+        (0, 0, 0, 196)
+    )  # Custom background: light gray with about 50% transparency
     SCREEN.blit(overlay, (0, 0))
 
     while True:
         GAME_CLOCK.tick(60)
         menu_mouse_pos = pygame.mouse.get_pos()
 
-        pause_text = get_font(80).render("Paused", True, (186,174,165))
-        pause_rect = pause_text.get_rect(center=(SCREEN_WIDTH//2, 100))
-        
+        pause_text = get_font(80).render("Paused", True, (186, 174, 165))
+        pause_rect = pause_text.get_rect(center=(SCREEN_WIDTH // 2, 100))
+
         # The main button
         resume_button = Button(
             image=None,
@@ -134,7 +136,7 @@ def game_over(score_system: ScoreSystem):
     final_score = score_system.score
 
     while True:
-        SCREEN.blit(BG, (0, 0))
+        SCREEN.blit(BG_MENU, (0, 0))
         menu_mouse_pos = pygame.mouse.get_pos()
 
         game_over_text = get_font(80).render("Game Over!", True, "#b68f40")
@@ -187,7 +189,7 @@ def main():
     pygame.display.set_caption("Asteroids")
 
     while True:
-        SCREEN.blit(BG, (0, 0))
+        SCREEN.blit(BG_MENU, (0, 0))
         menu_mouse_pos = pygame.mouse.get_pos()
 
         menu_text = get_font(100).render("Asteroids", True, "#b68f40")

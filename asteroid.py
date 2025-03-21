@@ -12,7 +12,7 @@ class Asteroid(circleshape.CircleShape):
         self.kind = kind
 
     def generate_edges(self, n):
-        rand_angles = random.sample(range(0, 360, max((360//n)-(n//2), 1)), n)
+        rand_angles = random.sample(range(0, 360, max((360 // n) - (n // 2), 1)), n)
         rand_angles.sort()
         rand_points = []
 
@@ -40,7 +40,6 @@ class Asteroid(circleshape.CircleShape):
             self.position.x += SCREEN_WIDTH
         if self.position.x > SCREEN_WIDTH:
             self.position.x -= SCREEN_WIDTH
-
 
     def split(self, bullet: Shot):
         self.kill()
@@ -90,7 +89,9 @@ class Asteroid(circleshape.CircleShape):
 
         # Prevent division by zero or redundant checks
         if distance == 0:
-            delta_pos = pygame.Vector2(random.uniform(-1, 1), random.uniform(-1, 1)).normalize()
+            delta_pos = pygame.Vector2(
+                random.uniform(-1, 1), random.uniform(-1, 1)
+            ).normalize()
             distance = self.radius + other.radius
 
         # Calculate overlap and resolve it
