@@ -48,6 +48,10 @@ def play():
             if asteroid.is_in_collision(player):
                 game_over(score_system)
 
+            for asteroid_2 in asteroid_group:
+                if asteroid != asteroid_2 and asteroid.is_in_collision(asteroid_2):
+                    asteroid.handle_collision(asteroid_2)
+
             for bullet in shot_group:
                 if asteroid.is_in_collision(bullet):
                     asteroid.split(bullet)
