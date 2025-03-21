@@ -28,12 +28,19 @@ class Asteroid(circleshape.CircleShape):
 
         edge_update = [self.position + edge for edge in self.edges]
 
-        pygame.draw.polygon(screen, color="red", points=edge_update, width=2)
+        pygame.draw.polygon(screen, color=(128, 128, 128), points=edge_update)
+        pygame.draw.polygon(screen, color=(144, 12, 63), points=edge_update, width=3)
 
     def update(self, dt):
         super().update(dt)
 
         self.position += self.velocity * dt
+
+        if self.position.x < 0:
+            self.position.x += SCREEN_WIDTH
+        if self.position.x > SCREEN_WIDTH:
+            self.position.x -= SCREEN_WIDTH
+
 
     def split(self, bullet: Shot):
         self.kill()
