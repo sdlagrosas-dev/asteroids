@@ -13,7 +13,7 @@ class Player(circleshape.CircleShape):
 
     def triangle(self):
         front_vector = pygame.Vector2(0, -1).rotate(self.rotation)
-        side_vector = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius
+        side_vector = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5
         a = self.position + front_vector * self.radius
         b = self.position - front_vector * self.radius - side_vector
         c = self.position - front_vector * self.radius + side_vector
@@ -21,7 +21,6 @@ class Player(circleshape.CircleShape):
 
     def draw(self, screen):
         super().draw(screen)
-
         pygame.draw.polygon(screen, color="white", points=self.triangle(), width=2)
 
     def rotate(self, dt):
@@ -47,6 +46,15 @@ class Player(circleshape.CircleShape):
             else:
                 # Shoot Cooldown
                 self.shoot_timer -= dt
+
+        if self.position.x < 0:
+            self.position.x += SCREEN_WIDTH
+        if self.position.x > SCREEN_WIDTH:
+            self.position.x -= SCREEN_WIDTH
+        if self.position.y < 0:
+            self.position.y = 0
+        if self.position.y > SCREEN_HEIGHT:
+            self.position.y = SCREEN_HEIGHT
 
     def shoot(self):
         front_pos = self.triangle()[0]
