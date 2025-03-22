@@ -1,7 +1,6 @@
 import random
 import pygame
 import circleshape
-from shot import Shot
 from constants import *
 
 
@@ -10,6 +9,7 @@ class Asteroid(circleshape.CircleShape):
         super().__init__(x, y, radius)
         self.edges = self.generate_edges(15)
         self.kind = kind
+        self.health = int(kind * 1.5)
 
     def generate_edges(self, n):
         rand_angles = random.sample(range(0, 360, max((360 // n) - (n // 2), 1)), n)
@@ -41,7 +41,11 @@ class Asteroid(circleshape.CircleShape):
         if self.position.x > SCREEN_WIDTH:
             self.position.x -= SCREEN_WIDTH
 
-    def split(self, bullet: Shot):
+        if self.position.y < -self.radius * 3 or self.position.y > SCREEN_HEIGHT + self.radius * 3:
+            self.kill()
+
+    def split(self, other: circleshape.CircleShape, effect_manager):
+        effect_manager.add_effect(self.position, self.radius, 0.5, "explosion", target=self)
         self.kill()
 
         if self.radius <= ASTEROID_MIN_RADIUS:
@@ -53,12 +57,16 @@ class Asteroid(circleshape.CircleShape):
             base_direction = pygame.Vector2(1, 0)  # Prevent division by zero
         base_direction = base_direction.normalize()
 
-        # Scale velocity for smaller asteroids (make them faster)
+        # Ensure `other.velocity` is not zero (add a small random velocity if needed)
+        base_velocity = other.velocity if other.velocity.length() > 0 else pygame.Vector2(random.uniform(-1, 1), random.uniform(-1, 1)) * 50
+
+        # Scale velocity for smaller asteroids
         velocity_scale = 1 + (ASTEROID_KINDS - self.kind) * 0.2
-        new_velocity_magnitude = bullet.velocity.length() * velocity_scale
+        new_velocity_magnitude = base_velocity.length() * velocity_scale
 
         # Generate **opposing** directions with significant separation
         angle_offset = random.uniform(30, 100)
+        
         velocity_1 = base_direction.rotate(angle_offset) * new_velocity_magnitude
         velocity_2 = base_direction.rotate(-angle_offset) * new_velocity_magnitude
 
@@ -118,3 +126,9 @@ class Asteroid(circleshape.CircleShape):
         # Reconstruct velocities
         self.velocity = (normal * v1n) + (tangent * v1t)
         other.velocity = (normal * v2n) + (tangent * v2t)
+
+    def take_damage(self, other, effect_manager, score_system):
+        if self.health <= 0:
+            self.split(other, effect_manager)
+            score_system.add_score(self)
+        self.health = max(0, self.health - 1)
