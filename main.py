@@ -7,6 +7,7 @@ from asteroidfield import AsteroidField
 from scoresystem import ScoreSystem
 from button import Button
 from shot import Shot
+from effects import EffectManager
 
 
 def play():
@@ -26,10 +27,12 @@ def play():
     Shot.containers = (updatable, drawable, shot_group)
     ScoreSystem.containers = (updatable, drawable)
 
+
     # Initialized Instances
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.9)
     asteroid_field = AsteroidField()
     score_system = ScoreSystem()
+    effect_manager = EffectManager()
 
     while True:
         for event in pygame.event.get():
@@ -46,7 +49,13 @@ def play():
 
         for asteroid in asteroid_group:
             if asteroid.is_in_collision(player):
-                game_over(score_system)
+                asteroid.split(player, effect_manager)
+
+                if player.immunity_timer <= 0:
+                    player.take_damage(effect_manager)
+                
+                    if player.health <= 0:
+                        game_over(score_system)
 
             for asteroid_2 in asteroid_group:
                 if asteroid != asteroid_2 and asteroid.is_in_collision(asteroid_2):
@@ -54,9 +63,11 @@ def play():
 
             for bullet in shot_group:
                 if asteroid.is_in_collision(bullet):
-                    asteroid.split(bullet)
-                    score_system.add_score(asteroid)
+                    asteroid.take_damage(bullet, effect_manager, score_system)
                     bullet.kill()
+
+        effect_manager.update(dt)
+        effect_manager.draw(SCREEN)
 
         for obj in drawable:
             obj.draw(SCREEN)
